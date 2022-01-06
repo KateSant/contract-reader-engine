@@ -2,7 +2,7 @@ name: Java CI with Maven - Run Tests
 
 on:
   push:
-    branches: [ main, devenv/dave ]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
   workflow_dispatch:

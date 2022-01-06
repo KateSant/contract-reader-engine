@@ -1,11 +1,11 @@
-name: Deploy to GCP - PROD
+name: Deploy Contract Reader Engine Service to production
 
 on: [workflow_dispatch]
 
 jobs:
   deploy_to_prod:
     runs-on: ubuntu-latest
-    name: Deploy to prod
+    name: Deploy Contract Reader Engine Service
     steps:
       - uses: actions/checkout@v2
       - id: foo
@@ -13,5 +13,5 @@ jobs:
         with:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
           BRANCH: main
-          SERVICE: contract-reader
-          IMAGE: contract-reader-image
+          SERVICE: contract-reader-engine-service
+          IMAGE: contract-reader-engine-image
