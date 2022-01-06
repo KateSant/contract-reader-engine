@@ -10,6 +10,4 @@ public class Obligation extends Match{
     private String party;
     private String obligingVerb;
     private String action;
-
-
 }

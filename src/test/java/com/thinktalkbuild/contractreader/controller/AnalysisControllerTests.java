@@ -10,12 +10,16 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.time.Period;
 import java.util.*;
 
-import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
@@ -26,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class UploadControllerTests {
+public class AnalysisControllerTests {
 
     @Autowired
     private MockMvc mvc;
@@ -43,16 +47,6 @@ public class UploadControllerTests {
     @MockBean
     private DurationFinder durationFinder;
 
-    @Test
-    void whenGetUploadPage_thenReceiveSuccess()
-            throws Exception {
-
-        mvc.perform(get("/"))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Upload")));
-
-    }
 
     @Test
     void whenPostAFile_thenReceiveAnalysis() throws Exception {
@@ -77,19 +71,12 @@ public class UploadControllerTests {
         when(obligationsFinder.findAndSortObligations(anyList())).thenReturn(obligations);
         when(durationFinder.findDurationsInDocument(anyList())).thenReturn(mockDurations);
 
-        MvcResult result = mvc.perform(multipart("/upload-file")
+        mvc.perform(multipart("/analyse")
                 .file(mockFile))
+                .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().is(200))
-                .andReturn();
-        String stringResult = result.getResponse().getContentAsString();
-        assertTrue(stringResult.contains("<h2 class=\"subtitle\">Dummy section title</h2>"));
-
-        assertTrue(stringResult.contains("<p>Dummy section</p>"));
-        assertTrue(stringResult.contains("<h2 class=\"subtitle\">SUPPLIER</h2>"));
-        assertTrue(stringResult.contains("The Supplier must do stuff"));
-
-        assertTrue(stringResult.contains("42"));
-
-
+                .andExpect(jsonPath("$.fileName", is("WordDocWithLinesAndParagraphs.docx")))
+                .andExpect(jsonPath("$.summary.sections", hasSize(1)))
+                .andExpect(jsonPath("$.summary.sections[0].title", is("Dummy section title")));
     }
 }
