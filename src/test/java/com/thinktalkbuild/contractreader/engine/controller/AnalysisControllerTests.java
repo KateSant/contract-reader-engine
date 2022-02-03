@@ -50,7 +50,6 @@ public class AnalysisControllerTests {
         MockMultipartFile mockFile = new TestUtils().dummyWordDoc("WordDocWithLinesAndParagraphs.docx");
         ContractSummary mockContractSummary = new ContractSummary();
         mockContractSummary.addSection(new ContractSummarySection("Dummy section title", Collections.singletonList("Dummy section")));
-
         Obligation mockObligation = new Obligation();
         mockObligation.setParty("The Supplier");
         mockObligation.setContextHighlighted("The Supplier must do stuff");

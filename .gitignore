@@ -8,6 +8,9 @@ target/
 nbactions.xml
 mvnw
 mvnw.cmd
+.terraform*
+.idea
+terraform/.terraform.lock.hcl
 
 
 /nbproject/
