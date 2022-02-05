@@ -1,5 +1,4 @@
 provider "google" {
-  credentials = file("/Users/kate/gcp-creds.json")
   project     = "contract-reader"
   region      = "europe-west4"
 }
