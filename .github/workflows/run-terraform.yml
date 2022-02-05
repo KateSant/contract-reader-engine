@@ -8,12 +8,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: checkout
+      uses: actions/checkout@v2
 
     - uses: hashicorp/setup-terraform@v1
 
-    - run: terraform init
 
-    - id: plan
+    - name: terraform init
+      run: |
+          terraform init
+
+    - name: terraform plan
       run: terraform plan -no-color
 
     - run: echo ${{ steps.plan.outputs.stdout }}
