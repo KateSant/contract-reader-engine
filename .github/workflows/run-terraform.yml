@@ -15,7 +15,13 @@ jobs:
     - name: checkout
       uses: actions/checkout@v2
 
-    - uses: hashicorp/setup-terraform@v1
+    - name: Login to GCP
+      uses: google-github-actions/setup-gcloud@v0.2.0
+      with:
+        service_account_key: ${{ inputs.GCP_SA_KEY }}
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
 
 
     - name: terraform init
