@@ -2,9 +2,6 @@ name: Terraform - in dev
 
 on:
   workflow_dispatch:
-env:
-  GOOGLE_CREDENTIALS: ${{ inputs.GCP_SA_KEY }}
-
 
 jobs:
   run-terraform:
@@ -21,9 +18,10 @@ jobs:
 
     - uses: google-github-actions/setup-gcloud@v0.2.0
       with:
-        service_account_key: ${{ inputs.GCP_SA_KEY }}
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
 
     - run: gcloud auth application-default login
+      shell: bash
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
