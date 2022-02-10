@@ -16,11 +16,15 @@ jobs:
       uses: actions/checkout@v2
 
 
+      # Setup gcloud CLI
     - uses: google-github-actions/setup-gcloud@v0.2.0
       with:
         service_account_key: ${{ secrets.GCP_SA_KEY }}
+        project_id: contract-reader
 
-    - run: gcloud auth application-default login
+      # Configure Docker to use the gcloud command-line tool as a credential
+      # helper for authentication
+    - run: gcloud --quiet auth configure-docker
       shell: bash
 
     - name: Setup Terraform
