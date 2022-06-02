@@ -4,39 +4,39 @@ on:
   workflow_dispatch:
 
 jobs:
-  run-terraform:
+  terraform:
+    name: "Terraform"
     runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: terraform
-
     steps:
-    - name: checkout
-      uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
 
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          # terraform_version: 0.13.0:
+          cli_config_credentials_token: ${{ secrets.TC_CLOUD_API_TOKEN }}
 
-      # Setup gcloud CLI
-    - uses: google-github-actions/setup-gcloud@v0.2.0
-      with:
-        service_account_key: ${{ secrets.GCP_SA_KEY }}
-        project_id: contract-reader
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt -check
 
-      # Configure Docker to use the gcloud command-line tool as a credential
-      # helper for authentication
-    - run: gcloud --quiet auth configure-docker
-      shell: bash
+      - name: Terraform Init
+        id: init
+        run: terraform init
+      
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
 
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color -input=false
 
-    - name: terraform init
-      run: |
-          terraform init
+      - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
 
-    - name: terraform plan
-      run: terraform plan -no-color
-
-    - run: echo ${{ steps.plan.outputs.stdout }}
-    - run: echo ${{ steps.plan.outputs.stderr }}
-    - run: echo ${{ steps.plan.outputs.exitcode }}
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -auto-approve -input=false
