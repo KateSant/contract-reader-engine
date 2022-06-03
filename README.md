@@ -1,5 +1,10 @@
 # How to build and deploy
 
+Hit the GithubAction https://github.com/KateSant/contract-reader-engine/actions/workflows/CD-on-dispatch-deploy-to-prod.yml
+It will terraform etc.
+
+# OLD How to build and deploy
+
 ##  Build docker container
 
 ```

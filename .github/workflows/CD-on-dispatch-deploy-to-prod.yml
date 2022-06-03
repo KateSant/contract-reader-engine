@@ -8,10 +8,12 @@ jobs:
     name: Deploy Contract Reader Engine Service
     steps:
       - uses: actions/checkout@v2
-      - id: foo
+      - id: docker
         uses: ./.github/actions/build-docker-deploy-to-gcp
         with:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
           BRANCH: main
-          SERVICE: contract-reader-engine-service
+          SERVICE: contract-reader-engine-service-tfd
           IMAGE: contract-reader-engine-image
+          TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+          

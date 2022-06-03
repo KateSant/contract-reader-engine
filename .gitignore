@@ -11,6 +11,7 @@ mvnw.cmd
 .terraform*
 .idea
 terraform/.terraform.lock.hcl
-
+*.tfstate
+*.tfstate.backup
 
 /nbproject/
