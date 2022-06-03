@@ -1,10 +1,10 @@
-name: Deploy Contract Reader Engine Service to production
+name: DAVE - deploy action
 
 on: [workflow_dispatch]
 
 env:
   TF_IN_AUTOMATION: true
-  TF_WORKSPACE: gcp-contractreader-engine
+  TF_WORKSPACE: gcp-contractreader-engine-dev-dave
 
 jobs:
   deploy_to_prod:
@@ -16,8 +16,8 @@ jobs:
         uses: ./.github/actions/build-docker-deploy-to-gcp
         with:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
-          BRANCH: main
-          SERVICE: contract-reader-engine-service-tfd
-          IMAGE: contract-reader-engine-image
+          BRANCH: dev-dave
+          SERVICE: contract-reader-engine-service-tfd-dev-dave
+          IMAGE: contract-reader-engine-image-dev-dave
           TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
           
