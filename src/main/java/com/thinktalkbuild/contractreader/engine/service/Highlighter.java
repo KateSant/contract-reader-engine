@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 
 /**
@@ -30,7 +31,7 @@ public class Highlighter {
     protected String highlight(String paragraph, List<String> words) {
         String outputParagraph = paragraph;
         for(String word: words){
-            outputParagraph = outputParagraph.replaceAll(word, PRE_SPAN+word+POST_SPAN);
+            outputParagraph = outputParagraph.replaceAll(Pattern.quote(word), PRE_SPAN+word+POST_SPAN);
         }
         return outputParagraph;
     }
