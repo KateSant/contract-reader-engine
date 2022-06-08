@@ -1,5 +1,6 @@
 package com.thinktalkbuild.contractreader.engine.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.regex.Pattern;
  * @author kate
  */
 @Service
+@Slf4j
 public class Highlighter {
 
     public static String PRE_SPAN = "<span class=\"highlight\">";
@@ -31,7 +33,7 @@ public class Highlighter {
     protected String highlight(String paragraph, List<String> words) {
         String outputParagraph = paragraph;
         for(String word: words){
-            outputParagraph = outputParagraph.replaceAll(Pattern.quote(word), PRE_SPAN+word+POST_SPAN);
+            outputParagraph = outputParagraph.replace(word, PRE_SPAN+word+POST_SPAN);
         }
         return outputParagraph;
     }

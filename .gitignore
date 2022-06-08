@@ -15,3 +15,4 @@ terraform/.terraform.lock.hcl
 *.tfstate.backup
 
 /nbproject/
+*.iml
