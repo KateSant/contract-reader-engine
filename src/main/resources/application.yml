@@ -44,4 +44,16 @@ contract-summary:
         - consent
         - approve
         - approval
-
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 732029486745-2bje4fg5be35kav1j3jmc65q04nmeo5t.apps.googleusercontent.com
+            client-secret: [injected]
+            scope: openid,profile,email
+      resourceserver:
+        jwt:
+          issuer-uri: https://accounts.google.com
+          jwk-set-uri: https://www.googleapis.com/oauth2/v3/certs
