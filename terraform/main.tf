@@ -20,13 +20,7 @@ provider "google" {
   region      = "europe-west4"
 }
 
-variable "service-name" {
-  type = string
-}
 
-variable "docker-image" {
-  type = string
-}
 
 resource "google_cloud_run_service" "cluster" {
   name     = var.service-name
@@ -36,6 +30,10 @@ resource "google_cloud_run_service" "cluster" {
     spec {
       containers {
         image = var.docker-image
+        env {
+          name = "spring_security_oauth2_client_registration_google_clientSecret"
+          value = var.oauth-google-secret
+        }
       }
     }
   }

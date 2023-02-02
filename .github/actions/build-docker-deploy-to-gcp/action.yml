@@ -11,6 +11,8 @@ inputs:
     required: true
   TF_API_TOKEN:
     required: true
+  OAUTH_GOOGLE_SECRET:
+    required: true
 
 
 runs:
@@ -62,7 +64,7 @@ runs:
     # Pass docker image name to terraform as input var 
     - name: Terraform Apply
       working-directory: terraform
-      run: terraform apply -var="docker-image=gcr.io/contract-reader/${{ inputs.IMAGE }}:$GITHUB_SHA" -var="service-name=${{ inputs.SERVICE }}" -auto-approve -input=false
+      run: terraform apply -var="docker-image=gcr.io/contract-reader/${{ inputs.IMAGE }}:$GITHUB_SHA" -var="service-name=${{ inputs.SERVICE }}" -var="oauth-google-secret=${{ inputs.OAUTH_GOOGLE_SECRET }}" -auto-approve -input=false
       shell: bash  
 
     # Deploy the image to Google Cloud Run
