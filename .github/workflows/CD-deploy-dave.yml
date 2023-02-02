@@ -20,4 +20,5 @@ jobs:
           SERVICE: contract-reader-engine-service-tfd-dev-dave
           IMAGE: contract-reader-engine-image-dev-dave
           TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+          OAUTH_GOOGLE_SECRET: ${{ secrets.OAUTH_GOOGLE_SECRET }}
           

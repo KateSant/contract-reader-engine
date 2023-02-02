@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
@@ -46,6 +47,7 @@ public class AnalysisControllerTests {
 
 
     @Test
+    @WithMockUser
     void whenPostAFile_thenReceiveAnalysis() throws Exception {
         MockMultipartFile mockFile = new TestUtils().dummyWordDoc("WordDocWithLinesAndParagraphs.docx");
         ContractSummary mockContractSummary = new ContractSummary();
