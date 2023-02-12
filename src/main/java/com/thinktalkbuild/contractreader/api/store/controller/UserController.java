@@ -24,9 +24,12 @@ public class UserController {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
         String username = authentication.getName();
+        log.info("Authentication username = [{}]", username);
+        log.info("Authentication principal", authentication.getPrincipal());
         Jwt principal = (Jwt)authentication.getPrincipal();
 
-        log.info("Principal subject = [{}]", principal.getSubject());
+        log.info("Jwt subject = [{}]", principal.getSubject());
+        log.info("Jwt issuer = [{}]", principal.getIssuer());
 
     }
 }
