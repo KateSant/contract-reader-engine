@@ -1,6 +1,7 @@
 package com.thinktalkbuild.contractreader.api.store.service;
 
 import com.google.api.core.ApiFuture;
+import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
@@ -14,13 +15,16 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class UserService {
 
-    public void addUser() throws ExecutionException, InterruptedException {
+    private static String AUTH_PROVIDER = "google"; //TODO add other impls
+
+    public void addUser(String subjectClaim) throws ExecutionException, InterruptedException {
         Firestore db = FirestoreOptions.getDefaultInstance().getService();
-        DocumentReference docRef = db.collection("users").document("alovelace2");
+        String id = subjectClaim + "_" + AUTH_PROVIDER;
+        DocumentReference docRef = db.collection("users").document(id);
         Map<String, Object> data = new HashMap<>();
-        data.put("first", "Ada");
-        data.put("last", "Lovelace");
-        data.put("born", 1815);
+        data.put("subject", subjectClaim);
+        data.put("provider", AUTH_PROVIDER);
+        data.put("created", Timestamp.now());
         //asynchronously write data
         ApiFuture<WriteResult> result = docRef.set(data);
         // ...

@@ -37,7 +37,7 @@ public class UserController {
         log.info("Jwt subject = [{}]", principal.getSubject());
         log.info("Jwt issuer = [{}]", principal.getIssuer());
 
-        userService.addUser();
+        userService.addUser(principal.getSubject());
 
     }
 }
