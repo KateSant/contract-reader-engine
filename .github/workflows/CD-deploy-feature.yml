@@ -1,0 +1,23 @@
+name: FEATURE BRANCH - deploy action
+
+on: [workflow_dispatch]
+
+env:
+  TF_IN_AUTOMATION: true
+  TF_WORKSPACE: gcp-contractreader-engine-dev
+
+jobs:
+  deploy_to_prod:
+    runs-on: ubuntu-latest
+    name: Deploy Contract Reader Engine Service
+    steps:
+      - uses: actions/checkout@v2
+      - id: docker
+        uses: ./.github/actions/build-docker-deploy-to-gcp
+        with:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+          BRANCH: CR-21_firestore_with_spring_data
+          SERVICE: contract-reader-engine-service-tfd-dev
+          IMAGE: contract-reader-engine-image-dev
+          TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+          
