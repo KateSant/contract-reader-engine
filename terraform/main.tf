@@ -34,6 +34,10 @@ resource "google_cloud_run_service" "cluster" {
           name = "spring_security_oauth2_client_registration_google_clientSecret"
           value = var.oauth-google-secret
         }
+        env {
+          name = "env"
+          value = var.env
+        }
       }
     }
   }

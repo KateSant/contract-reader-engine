@@ -1,3 +1,4 @@
+env: [injected]
 obligations:
   obliging-verbs:
     - shall
