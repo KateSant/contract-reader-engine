@@ -24,7 +24,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/user")
-    public void user() throws ExecutionException, InterruptedException {
+    public void user() throws Exception {
 
         log.info("Call to /user POST endpoint");
         SecurityContext context = SecurityContextHolder.getContext();
