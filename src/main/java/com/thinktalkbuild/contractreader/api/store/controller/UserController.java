@@ -1,5 +1,6 @@
 package com.thinktalkbuild.contractreader.api.store.controller;
 
+import com.thinktalkbuild.contractreader.api.store.model.User;
 import com.thinktalkbuild.contractreader.api.store.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
+
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import com.thinktalkbuild.contractreader.api.store.service.UserService;
 
@@ -37,7 +40,8 @@ public class UserController {
         log.info("Jwt subject = [{}]", principal.getSubject());
         log.info("Jwt issuer = [{}]", principal.getIssuer());
 
-        userService.addUser(principal.getSubject());
+        Optional<User> user = userService.findUser(principal.getSubject());
+        log.info("Found user: {}", user);
 
     }
 }
