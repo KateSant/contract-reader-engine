@@ -15,6 +15,7 @@ jobs:
       - id: docker
         uses: ./.github/actions/build-docker-deploy-to-gcp
         with:
+          ENV: dev
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
           BRANCH: dev
           SERVICE: contract-reader-engine-service-tfd-dev

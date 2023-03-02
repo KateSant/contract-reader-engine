@@ -1,10 +1,10 @@
-name: DAVE - deploy action
+name: FEATURE BRANCH - deploy action
 
 on: [workflow_dispatch]
 
 env:
   TF_IN_AUTOMATION: true
-  TF_WORKSPACE: gcp-contractreader-engine-dev-dave
+  TF_WORKSPACE: gcp-contractreader-engine-dev
 
 jobs:
   deploy_to_prod:
@@ -15,10 +15,10 @@ jobs:
       - id: docker
         uses: ./.github/actions/build-docker-deploy-to-gcp
         with:
+          ENV: dev
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
-          BRANCH: dev-dave
-          SERVICE: contract-reader-engine-service-tfd-dev-dave
-          IMAGE: contract-reader-engine-image-dev-dave
+          BRANCH: CR-21-firestore-plain
+          SERVICE: contract-reader-engine-service-tfd-dev
+          IMAGE: contract-reader-engine-image-dev
           TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
-          OAUTH_GOOGLE_SECRET: ${{ secrets.OAUTH_GOOGLE_SECRET }}
           

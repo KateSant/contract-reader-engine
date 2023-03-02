@@ -9,3 +9,7 @@ variable "docker-image" {
 variable "oauth-google-secret" {
   type = string
 }
+
+variable "env" {
+  type = string
+}
