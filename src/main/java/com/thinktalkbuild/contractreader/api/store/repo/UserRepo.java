@@ -5,6 +5,7 @@ import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.thinktalkbuild.contractreader.api.store.model.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +13,7 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 @Component
+@Slf4j
 public class UserRepo {
 
     @Value("${env}")
@@ -24,11 +26,17 @@ public class UserRepo {
     public Optional<User> findById(String id) throws ExecutionException, InterruptedException {
         Firestore db = FirestoreOptions.getDefaultInstance().getService();
         DocumentReference docRef = db.collection(users()).document(id);
-        User u = new User();
-        u.setId(docRef.getId());
         DocumentSnapshot doc = docRef.get().get();
-        u.setSubject((String)doc.get("subject"));
-        u.setProvider((String)doc.get("provider"));
-        return Optional.of(u);
+        log.info("[{}] Exists? [{}]", id, doc.exists());
+        if(doc.exists()) {
+            User u = new User();
+            u.setId(docRef.getId());
+
+            u.setSubject((String) doc.get("subject"));
+            u.setProvider((String) doc.get("provider"));
+            return Optional.of(u);
+        }else{
+            return Optional.empty();
+        }
     }
 }

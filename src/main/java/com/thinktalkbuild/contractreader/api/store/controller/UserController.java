@@ -41,7 +41,7 @@ public class UserController {
         log.info("Jwt issuer = [{}]", principal.getIssuer());
 
         Optional<User> user = userService.findUser(principal.getSubject());
-        log.info("Found user: {}", user);
+        log.info("Found user? {}", user);
 
     }
 }
