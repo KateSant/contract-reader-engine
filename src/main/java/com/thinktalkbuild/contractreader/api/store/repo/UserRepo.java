@@ -1,14 +1,15 @@
 package com.thinktalkbuild.contractreader.api.store.repo;
 
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.FirestoreOptions;
+import com.google.api.core.ApiFuture;
+import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.*;
 import com.thinktalkbuild.contractreader.api.store.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
@@ -22,6 +23,7 @@ public class UserRepo {
     private String users(){
         return env + ":USERS";
     }
+
 
     public Optional<User> findById(String id) throws ExecutionException, InterruptedException {
         Firestore db = FirestoreOptions.getDefaultInstance().getService();
@@ -39,4 +41,16 @@ public class UserRepo {
             return Optional.empty();
         }
     }
+
+    public void insertUser(User newUser) throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreOptions.getDefaultInstance().getService();
+        DocumentReference docRef = db.collection(users()).document(newUser.getId());
+        Map<String, Object> data = new HashMap<>();
+        data.put("subject", newUser.getSubject());
+        data.put("provider", newUser.getProvider());
+        data.put("created", Timestamp.now());
+        ApiFuture<WriteResult> result = docRef.set(data);
+        System.out.println("Update time : " + result.get().getUpdateTime());
+    }
+
 }

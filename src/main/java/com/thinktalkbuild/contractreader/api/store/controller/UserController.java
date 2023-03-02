@@ -40,8 +40,7 @@ public class UserController {
         log.info("Jwt subject = [{}]", principal.getSubject());
         log.info("Jwt issuer = [{}]", principal.getIssuer());
 
-        Optional<User> user = userService.findUser(principal.getSubject());
-        log.info("Found user? {}", user);
-
+        User user = userService.insertUserIfNotExists(principal.getSubject());
+        log.info("Inserted or found: {}", user);
     }
 }
