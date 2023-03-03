@@ -2,6 +2,8 @@ package com.thinktalkbuild.contractreader.api.store.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thinktalkbuild.contractreader.api.store.model.ContractMetadata;
+import com.thinktalkbuild.contractreader.api.store.repo.ContractRepo;
+import com.thinktalkbuild.contractreader.api.store.repo.UserRepo;
 import com.thinktalkbuild.contractreader.api.store.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,11 @@ public class ContractControllerTests {
     @Autowired
     private MockMvc mvc;
 
+    @MockBean
+    ContractRepo contractRepo;
+
+    @MockBean
+    private UserService userService;
 
     @Test
     void whenPostToContractService_withToken_andWithJson_thenSuccess() throws Exception {
