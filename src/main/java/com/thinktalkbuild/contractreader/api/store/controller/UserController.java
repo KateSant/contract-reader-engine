@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 
+import java.security.Principal;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import com.thinktalkbuild.contractreader.api.store.service.UserService;
@@ -21,7 +22,7 @@ import com.thinktalkbuild.contractreader.api.store.service.UserService;
  */
 @RestController
 @Slf4j
-public class UserController {
+public class UserController extends JwtSecureController{
 
     @Autowired
     private UserService userService;
@@ -30,17 +31,11 @@ public class UserController {
     public void user() throws Exception {
 
         log.info("Call to /user POST endpoint");
-        SecurityContext context = SecurityContextHolder.getContext();
-        Authentication authentication = context.getAuthentication();
-        String username = authentication.getName();
-        log.info("Authentication username = [{}]", username);
-        log.info("Authentication principal", authentication.getPrincipal());
-        Jwt principal = (Jwt)authentication.getPrincipal();
 
-        log.info("Jwt subject = [{}]", principal.getSubject());
-        log.info("Jwt issuer = [{}]", principal.getIssuer());
-
-        User user = userService.insertUserIfNotExists(principal.getSubject());
+        Jwt jwtPrincipal = getSecurityPrincipal();
+        User user = userService.insertUserIfNotExists(jwtPrincipal.getSubject());
         log.info("Inserted or found: {}", user);
     }
+
+
 }
