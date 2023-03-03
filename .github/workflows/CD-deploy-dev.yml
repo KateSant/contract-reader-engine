@@ -1,6 +1,11 @@
 name: DEV - deploy action
 
-on: [workflow_dispatch]
+on:
+  push:
+    branches: [ dev ]
+  pull_request:
+    branches: [ dev ]
+  workflow_dispatch:
 
 env:
   TF_IN_AUTOMATION: true
