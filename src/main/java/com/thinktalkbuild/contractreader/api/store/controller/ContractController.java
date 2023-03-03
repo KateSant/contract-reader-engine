@@ -1,14 +1,17 @@
 package com.thinktalkbuild.contractreader.api.store.controller;
 
+import com.thinktalkbuild.contractreader.api.store.model.ContractMetadata;
 import com.thinktalkbuild.contractreader.api.store.model.User;
 import com.thinktalkbuild.contractreader.api.store.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -20,10 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class ContractController extends JwtSecureController{
 
 
-    @PostMapping("/contract")
-    public void contract() throws Exception {
+    @PostMapping(value = "/contract", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public void contract(@RequestBody ContractMetadata contract) throws Exception {
 
-        log.info("Call to /contract POST endpoint");
+        log.info("Call to /contract POST endpoint with body: {}", contract);
         Jwt jwtPrincipal = getSecurityPrincipal();
         log.info("Security principal = {}", jwtPrincipal.getSubject());
     }
