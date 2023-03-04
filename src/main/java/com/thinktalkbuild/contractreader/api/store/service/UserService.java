@@ -25,7 +25,7 @@ public class UserService {
         return userRepo.findById(makeId(subjectClaim));
     }
 
-    public User insertUserIfNotExists(String subjectClaim) throws Exception{
+    public User findOrInsertUser(String subjectClaim) throws Exception{
         Optional<User> found = userRepo.findById(makeId(subjectClaim));
         if(found.isPresent()){
             log.info("Found...");

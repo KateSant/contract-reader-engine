@@ -6,15 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
-
-import java.security.Principal;
-import java.util.Optional;
-import java.util.concurrent.ExecutionException;
-import com.thinktalkbuild.contractreader.api.store.service.UserService;
 
 /**
  *
@@ -33,7 +25,7 @@ public class UserController extends JwtSecureController{
         log.info("Call to /user POST endpoint");
 
         Jwt jwtPrincipal = getSecurityPrincipal();
-        User user = userService.insertUserIfNotExists(jwtPrincipal.getSubject());
+        User user = userService.findOrInsertUser(jwtPrincipal.getSubject());
         log.info("Inserted or found: {}", user);
     }
 

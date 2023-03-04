@@ -1,15 +1,11 @@
 package com.thinktalkbuild.contractreader.api.store.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thinktalkbuild.contractreader.api.store.model.ContractMetadata;
-import com.thinktalkbuild.contractreader.api.store.model.User;
-import com.thinktalkbuild.contractreader.api.store.repo.ContractRepo;
-import com.thinktalkbuild.contractreader.api.store.service.UserService;
+import com.thinktalkbuild.contractreader.api.store.service.ContractService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,21 +20,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class ContractController extends JwtSecureController{
 
     @Autowired
-    ContractRepo contractRepo;
-
-    @Autowired
-    private UserService userService;
+    private ContractService contractService;
 
     @PostMapping(value = "/contract", consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public void contract(@RequestBody ContractMetadata contract) throws Exception {
-
+    public ContractMetadata contract(@RequestBody ContractMetadata contract) throws Exception {
         log.info("Call to /contract POST endpoint with body: {}", contract);
         Jwt jwtPrincipal = getSecurityPrincipal();
-        log.info("Security principal = {}", jwtPrincipal.getSubject());
-
-        User user = userService.insertUserIfNotExists(jwtPrincipal.getSubject());
-        log.info("Inserted or found user: {}", user);
-
-        contractRepo.insertContract(contract, user);
+        ContractMetadata insertedContract = contractService.insertContractForUser(contract, jwtPrincipal.getSubject());
+        log.info("Inserted contract: {}", new ObjectMapper().writeValueAsString(insertedContract));
+        return insertedContract;
     }
 }

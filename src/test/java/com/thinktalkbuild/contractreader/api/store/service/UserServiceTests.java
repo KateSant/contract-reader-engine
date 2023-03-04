@@ -46,14 +46,14 @@ public class UserServiceTests {
     @Test
     public void givenUserNotExists_whenCallInsertUserIfNotExists_thenInsertUser() throws Exception {
         when(repo.findById("newjoiner_google")).thenReturn(Optional.empty());
-        service.insertUserIfNotExists("newjoiner");
+        service.findOrInsertUser("newjoiner");
         Mockito.verify(repo, times(1)).insertUser(any());
     }
 
     @Test
     public void givenUserExists_whenCallInsertUserIfNotExists_thenNotInsertUser() throws Exception {
         when(repo.findById("ada_google")).thenReturn(Optional.of(makeAda()));
-        service.insertUserIfNotExists("ada");
+        service.findOrInsertUser("ada");
         Mockito.verify(repo, times(0)).insertUser(any());
     }
 
