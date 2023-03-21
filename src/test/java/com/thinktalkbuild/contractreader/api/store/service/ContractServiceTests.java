@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.Collections;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -50,6 +53,25 @@ public class ContractServiceTests {
 
         verify(userService).findOrInsertUser("123");
         verify(repo).insertContract(myLittle, ada);
+
+    }
+
+    @Test
+    public void givenUserLoggedin_whenGetContracts_thenEnforcesUserIdAsForeignKey() throws Exception {
+
+        User ada = new User();
+        ada.setId("123_google");
+        ada.setSubject("123");
+        when(userService.findOrInsertUser("123")).thenReturn(ada);
+
+        ContractMetadata adasContract = new ContractMetadata();
+        adasContract.setName("Contract belonging to Ada");
+        when(repo.getContractsForUser(ada)).thenReturn(Collections.singletonList(adasContract));
+
+
+        List<ContractMetadata> results = service.getContractsForUser("123");
+        assertTrue(results.stream().anyMatch(c -> c.getName().equals("Contract belonging to Ada")));
+
 
     }
 

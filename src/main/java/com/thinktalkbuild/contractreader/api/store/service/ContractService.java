@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 @Slf4j
@@ -25,6 +27,12 @@ public class ContractService {
         String id = contractRepo.insertContract(contract, user);
         contract.setId(id);
         return contract;
+    }
+
+    public List<ContractMetadata> getContractsForUser(String subject) throws Exception{
+        User user = userService.findOrInsertUser(subject);
+        log.info("Inserted or found user: {}", user);
+        return contractRepo.getContractsForUser(user);
     }
 
 }

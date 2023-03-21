@@ -7,9 +7,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  *
@@ -29,5 +32,12 @@ public class ContractController extends JwtSecureController{
         ContractMetadata insertedContract = contractService.insertContractForUser(contract, jwtPrincipal.getSubject());
         log.info("Inserted contract: {}", new ObjectMapper().writeValueAsString(insertedContract));
         return insertedContract;
+    }
+
+    @GetMapping(value = "/contract")
+    public List<ContractMetadata> getContracts() throws Exception {
+        log.info("Call to /contract GET endpoint");
+        Jwt jwtPrincipal = getSecurityPrincipal();
+        return contractService.getContractsForUser(jwtPrincipal.getSubject());
     }
 }
