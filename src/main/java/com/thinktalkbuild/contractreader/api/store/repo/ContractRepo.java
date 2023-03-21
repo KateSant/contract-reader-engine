@@ -58,7 +58,7 @@ public class ContractRepo {
 /* TODO
 1. Handle dates
 2. UI to display list
-[3. jwt for different users for test
-4. firestore docker for test]
+
+[4. firestore docker for test]
  */
 
