@@ -17,9 +17,12 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.Collections;
 import java.util.List;
 
+import static java.time.LocalDate.now;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
@@ -62,6 +65,7 @@ public class ContractControllerTests {
 
         ContractMetadata contractMeta = new ContractMetadata();
         contractMeta.setName("Bloggs reseller agreement");
+        contractMeta.setStartDate(LocalDate.of(2023, Month.MARCH, 23));
         when(contractService.getContractsForUser(anyString()))
                 .thenReturn(Collections.singletonList(contractMeta));
 
@@ -69,7 +73,8 @@ public class ContractControllerTests {
                 .with(jwt()))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().is(200))
-                .andExpect(jsonPath("$[0].name").value("Bloggs reseller agreement"));
+                .andExpect(jsonPath("$[0].name").value("Bloggs reseller agreement"))
+                .andExpect(jsonPath("$[0].startDate").value("2023-03-23"));
     }
 
     @Test

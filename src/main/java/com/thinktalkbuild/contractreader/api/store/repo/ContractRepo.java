@@ -9,6 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 
@@ -28,10 +31,11 @@ public class ContractRepo {
         Firestore db = FirestoreOptions.getDefaultInstance().getService();
         DocumentReference docRef = db.collection(contracts()).document();// firestore generates an ID
         Map<String, Object> data = new HashMap<>();
+        data.put("user", owner.getId());
         data.put("name", newContract.getName());
         data.put("created", Timestamp.now());
-        data.put("user", owner.getId());
-        ApiFuture<WriteResult> result = docRef.set(data);
+        data.put("startDate", java.sql.Date.valueOf(newContract.getStartDate()));
+        docRef.set(data);
         log.info("Contract ID: {}", docRef.getId());
         return docRef.getId();
     }
@@ -48,6 +52,9 @@ public class ContractRepo {
             ContractMetadata result = new ContractMetadata();
             result.setId(document.getId());
             result.setName((String)document.get("name"));
+            Timestamp startDateTs = (Timestamp)document.get("startDate");
+            LocalDate startDateLd = startDateTs.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            result.setStartDate(startDateLd);
             results.add(result);
         }
         return results;
@@ -56,7 +63,7 @@ public class ContractRepo {
 }
 
 /* TODO
-1. Handle dates
+
 2. UI to display list
 
 [4. firestore docker for test]
