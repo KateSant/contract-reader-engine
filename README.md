@@ -1,33 +1,27 @@
-# How to build and deploy
+# What does this application do?
 
-Hit the GithubAction https://github.com/KateSant/contract-reader-engine/actions/workflows/CD-on-dispatch-deploy-to-prod.yml
-It will terraform etc.
+This application extracts key information from legal contracts.  For example the obligations, parties and duration.  
 
-# OLD How to build and deploy
+You can try it out by uploading a word document at: https://api.contracthub.thinktalkbuild.com  
 
-##  Build docker container
+It is an API so it returns JSON.   For humans there is a UI at https://contracthub.thinktalkbuild.com/ which consumes this API, it has a separate [repo for the U](https://github.com/KateSant/contract-reader-ui/tree/main) 
 
-```
-docker build -t gcr.io/contract-reader/contract-reader-image .
-docker run -p 80:8080 gcr.io/contract-reader/contract-reader-image (to check)
-```
-
-## Push image to Google Container Registry
-[One off - created project called contract-reader on Google Cloud 
-         - enabled google container registry API https://console.cloud.google.com/gcr/images/contract-reader?project=contract-reader]
-
-```
-gcloud auth login  [browser login - oauth - gmail account]
-gcloud config set project contract-reader
-gcloud auth configure-docker
-docker push gcr.io/contract-reader/contract-reader-image
-```
+It works by looking for word patterns, configured in [this yaml](https://github.com/KateSant/contract-reader-engine/blob/main/src/main/resources/application.yml) 
 
 
-## Deploy image to GCP
-[One off - create service called contract-reader on Google Cloud Run in region europe-west4 (Netherlands) https://console.cloud.google.com/run?project=contract-reader]   TODO: Terraform this.
+# Tech Stack
 
-```
-gcloud run deploy contract-reader --region europe-west4 --project contract-reader --image gcr.io/contract-reader/contract-reader-image --platform managed
-```
-OR use the UI https://console.cloud.google.com/run?project=contract-reader to pick image from container registry
+* Java
+* Springboot
+* Junit
+* Docker
+* Terraform
+* Google Cloud Platform, GCR
+* Github Actions
+
+# Useful links
+
+* GCP console: https://console.cloud.google.com/run?project=contract-reader
+* Github Action workflow: https://github.com/KateSant/contract-reader-engine/actions/workflows/CD-on-dispatch-deploy-to-prod.yml
+* Terraform Cloud: https://app.terraform.io/app/kate-dev/workspaces/gcp-contractreader-engine
+
